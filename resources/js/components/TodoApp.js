@@ -1,29 +1,30 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-  } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-const TodoApp = () => {
+  import Navbar from './Navbar/Navbar';
+  const Todos = lazy(() => import("./Todos/Todos"));
+  import TodosSkeleton from './Todos/TodosSkeleton';
+
+const RouterMain = () => {
     return (
-        <Router>
-      <div>
-        <Switch>
-          <Route exact path="/">
-            <h2>Hola Mundo</h2>
+      <Router >
+        <Navbar />
+        <Routes>
+          <Route exact path={'/'} element={
+              <Suspense fallback={<>Cargando...</>}>
+                  <TodosSkeleton />
+              </Suspense>
+          }>
           </Route>
-        </Switch>
-      </div>
+      </Routes>
     </Router>
     );
 }
 
 
-export default TodoApp;
+export default RouterMain;
 
-if (document.getElementById('todoApp')) {
-    ReactDOM.render(<TodoApp />, document.getElementById('todoApp'));
+if (document.getElementById('routerApp')) {
+    ReactDOM.render(<RouterMain />, document.getElementById('routerApp'));
 }
